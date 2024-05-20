@@ -29,8 +29,10 @@ export default function Sub() {
   };
 
   const handleSave = async (event, cellValues) => {
+    const { id } = cellValues.row; // Extract id from cellValues.row
+    console.log('Saving data for user with ID:', id); // Log the ID
     try {
-      await axios.put(`http://localhost:8081/edit_user/${cellValues.row.id}`, cellValues.row);
+      await axios.put(`http://localhost:8081/edit_user/${id}`, cellValues.row); // Use id directly in the URL
       setEditRowsModel((prevEditRowsModel) => ({
         ...prevEditRowsModel,
         [cellValues.id]: false,
@@ -41,6 +43,7 @@ export default function Sub() {
       console.error('Error saving data:', err);
     }
   };
+  
 
   const handleDelete = async (event, cellValues) => {
     try {

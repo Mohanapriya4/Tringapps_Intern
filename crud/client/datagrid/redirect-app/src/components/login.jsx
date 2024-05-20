@@ -26,7 +26,14 @@ export default function Form(){
       [name]: value
     });
   };
-  
+
+  const handlePhoneNumberChange = (event) => {
+    const phoneNumber = event.target.value;
+    setFormData({
+      ...formData,
+      phoneNumber: phoneNumber.slice(0, 10) // Limit phone number to 10 characters
+    });
+  };
   
 
  //handleSubmit function is used for handling form submission
@@ -45,7 +52,7 @@ export default function Form(){
     }
 
 
-    axios.post('http://localhost:8081/add_user', formData)
+    axios.post('http://localhost:8081/add_user', formData) //create data-post
     .then((res) => {
       console.log(res);
       setFormData({
@@ -87,7 +94,7 @@ export default function Form(){
             <label>Phone Number</label>
             <input type="tel" placeholder="Enter phone number" 
             value={formData.phoneNumber}
-            onChange={handleChange}
+            onChange={handlePhoneNumberChange}
             name="phoneNumber" 
             />
           </div>
