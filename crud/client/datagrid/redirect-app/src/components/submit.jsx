@@ -8,8 +8,6 @@ export default function Sub() {
   const [editRowsModel, setEditRowsModel] = useState({});
   const [editRowId, setEditRowId] = useState(null);
 
-
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -31,33 +29,31 @@ export default function Sub() {
   };
 
   const handleSave = async (event, cellValues) => {
-    const { id } = cellValues.row; // Extract id from cellValues.row
-    console.log('Saving data for user with ID:', id); // Log the ID
+    const { id } = cellValues.row;
     try {
-      await axios.put(`http://localhost:8081/edit_user/${id}`, cellValues.row); // Use id directly in the URL
+      await axios.put(`http://localhost:8081/edit_user/${id}`, cellValues.row);
       setEditRowsModel((prevEditRowsModel) => ({
         ...prevEditRowsModel,
         [cellValues.id]: false,
       }));
       setEditRowId(null);
-      fetchData(); // Refresh the data after saving
+      fetchData();
     } catch (err) {
       console.error('Error saving data:', err);
     }
   };
-  
 
   const handleDelete = async (event, cellValues) => {
     try {
       await axios.delete(`http://localhost:8081/delete_user/${cellValues.row.id}`);
-      fetchData(); // Refresh the data after deletion
+      fetchData();
     } catch (err) {
       console.error('Error deleting data:', err);
     }
   };
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90, editable: false },
+    { field: 'userId', headerName: 'ID', width: 90, editable: false },
     { field: 'username', headerName: 'Username', width: 150, editable: true },
     { field: 'email', headerName: 'Email', width: 200, editable: true },
     { field: 'phoneNumber', headerName: 'Phoneno', width: 150, editable: true },
@@ -110,8 +106,8 @@ export default function Sub() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/users`);
-      setUsers(response.data.map((user, index) => ({ ...user, id: index + 1 })));
+      const response = await axios.get('http://localhost:8081/users');
+      setUsers(response.data.map((user, index) => ({ ...user, id: user.userId })));
     } catch (err) {
       console.error('Error fetching data:', err);
     }
