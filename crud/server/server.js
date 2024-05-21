@@ -21,49 +21,63 @@ db.connect((err) => {
   console.log('Connected to the database');
 });
 
-app.post('/add_user', (req, res) => {
-  const { username, email, phoneNumber, city } = req.body;
-  const sql = "INSERT INTO details (username, email, phoneNumber, city) VALUES (?, ?, ?, ?)";
-  const values = [username, email, phoneNumber, city];
-  
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error('Error executing query:', err);
-      return res.status(500).json({ success: false, error: err.message });
-    }
-    console.log('Inserted successfully:', result);
-    return res.json({ success: true, result });
-  });
-});
-
+// Get users
 app.get('/users', (req, res) => {
   const sql = "SELECT * FROM details";
   db.query(sql, (err, rows) => {
     if (err) {
-      console.error('Error executing query:', err);
-      return res.status(500).json({ success: false, error: err.message });
+      console.error('Error fetching users:', err);
+      res.status(500).send('Error fetching users');
+      return;
     }
-    return res.status(200).json(rows);
+    res.send(rows);
   });
 });
 
+// Add user
+app.post('/add_user', (req, res) => {
+  const { username, email, phoneNumber, city } = req.body;
+  const sql = 'INSERT INTO details (username, email, phoneNumber, city) VALUES (?, ?, ?, ?)';
+  db.query(sql, [username, email, phoneNumber, city], (err, result) => {
+    if (err) {
+      console.error('Error adding user:', err);
+      res.status(500).send('Error adding user');
+      return;
+    }
+    res.send({ message: 'User added successfully', userId: result.insertId });
+  });
+});
+
+// Edit user
 app.put('/edit_user/:id', (req, res) => {
   const { id } = req.params;
   const { username, email, phoneNumber, city } = req.body;
-  const sql = "UPDATE details SET username = ?, email = ?, phoneNumber = ?, city = ? WHERE id = ?";
-  const values = [username, email, phoneNumber, city, id];
-
-  db.query(sql, values, (err, result) => {
+  const sql = 'UPDATE details SET username = ?, email = ?, phoneNumber = ?, city = ? WHERE userId = ?';
+  db.query(sql, [username, email, phoneNumber, city, id], (err, result) => {
     if (err) {
-      console.error('Error executing query:', err);
-      return res.status(500).json({ success: false, error: err.message });
+      console.error('Error updating user:', err);
+      res.status(500).send('Error updating user');
+      return;
     }
-    console.log('Updated successfully:', result);
-    return res.json({ success: true, result });
+    res.send({ message: 'User updated successfully' });
   });
 });
 
+// Delete user
+app.delete('/delete_user/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'DELETE FROM details WHERE userId = ?';
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Error deleting user:', err);
+      res.status(500).send('Error deleting user');
+      return;
+    }
+    res.send({ message: 'User deleted successfully' });
+  });
+});
 
-app.listen(8081, () => {
-  console.log("Server is running ..");
+const port = 8081;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });

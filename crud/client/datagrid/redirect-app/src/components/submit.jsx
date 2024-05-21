@@ -8,6 +8,8 @@ export default function Sub() {
   const [editRowsModel, setEditRowsModel] = useState({});
   const [editRowId, setEditRowId] = useState(null);
 
+
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -108,7 +110,7 @@ export default function Sub() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/users');
+      const response = await axios.get(`http://localhost:8081/users`);
       setUsers(response.data.map((user, index) => ({ ...user, id: index + 1 })));
     } catch (err) {
       console.error('Error fetching data:', err);
