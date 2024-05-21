@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import axios from 'axios';
-import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 export default function Sub() {
   const [users, setUsers] = useState([]);
@@ -52,6 +56,10 @@ export default function Sub() {
     }
   };
 
+  const handleDeleteAll= () =>{
+
+  }
+
   const columns = [
     { field: 'userId', headerName: 'ID', width: 90, editable: false },
     { field: 'username', headerName: 'Username', width: 150, editable: true },
@@ -64,42 +72,39 @@ export default function Sub() {
       width: 150,
       renderCell: (cellValues) => (
         editRowId === cellValues.id ? (
-          <Button
-            variant="contained"
+          <IconButton
             color="primary"
             onClick={(event) => {
               handleSave(event, cellValues);
             }}
           >
-            Save
-          </Button>
+            <SaveIcon />
+          </IconButton>
         ) : (
-          <Button
-            variant="contained"
+          <IconButton
             color="primary"
             onClick={(event) => {
               handleEdit(event, cellValues);
             }}
           >
-            Edit
-          </Button>
+            <EditIcon />
+          </IconButton>
         )
       ),
     },
     {
-      field: 'Delete',
+      field: 'delete',
       headerName: 'Delete',
       width: 150,
       renderCell: (cellValues) => (
-        <Button
-          variant="contained"
+        <IconButton
           color="secondary"
           onClick={(event) => {
             handleDelete(event, cellValues);
           }}
         >
-          Delete
-        </Button>
+          <DeleteIcon />
+        </IconButton>
       ),
     },
   ];
@@ -115,6 +120,7 @@ export default function Sub() {
 
   return (
     <div style={{ height: 400, width: '100%' }}>
+      <button onClick={handleDeleteAll}style={{margin:'20px', background:'red',color:"white"}}>Delete</button>
       <DataGrid
         rows={users}
         columns={columns}
@@ -126,6 +132,11 @@ export default function Sub() {
         }}
         onCellClick={handleCellClick}
         onRowClick={handleRowCellClick}
+        checkboxSelection
+        disableSelectionOnClick
+        onRowSelectionModelChange={(data)=>{
+          
+        }}
       />
     </div>
   );
