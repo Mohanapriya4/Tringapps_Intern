@@ -77,6 +77,25 @@ app.delete('/delete_user/:id', (req, res) => {
   });
 });
 
+// Delete multiple users
+app.delete('/delete_users', (req, res) => {
+  const { ids } = req.body; // Expecting an array of user IDs
+  if (!ids || ids.length === 0) {
+    res.status(400).send({ message: 'No IDs provided' });
+    return;
+  }
+  const sql = 'DELETE FROM details WHERE userId IN (?)';
+  db.query(sql, [ids], (err, result) => {
+    if (err) {
+      console.error('Error deleting users:', err);
+      res.status(500).send('Error deleting users');
+      return;
+    }
+    res.send({ message: 'Users deleted successfully' });
+  });
+});
+
+
 const port = 8081;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
