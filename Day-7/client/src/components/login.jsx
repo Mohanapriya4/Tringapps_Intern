@@ -48,7 +48,7 @@ export default function Form() {
       return;
     }
 
-    axios.post('http://localhost:8081/add_user', formData) //create data-post
+    axios.post('http://192.168.1.114:8081/add_user', formData) //create data-post
       .then((res) => {
         console.log(res);
         setFormData({
