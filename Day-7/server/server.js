@@ -30,7 +30,12 @@ app.get('/users', (req, res) => {
       res.status(500).send('Error fetching users');
       return;
     }
-    res.send(rows);
+    // Format birthDate to remove timezone information
+    const formattedRows = rows.map(row => ({
+      ...row,
+      birthDate: new Date(row.birthDate).toISOString().split('T')[0] // YYYY-MM-DD format
+    }));
+    res.send(formattedRows);
   });
 });
 
@@ -53,11 +58,9 @@ app.put('/edit_user/:id', (req, res) => {
   const { id } = req.params;
 const { username, email, phoneNumber, birthDate, gender, address, country, city, region } = req.body;
 
-// Convert birthDate to the correct format (YYYY-MM-DD)
-const formattedBirthDate = new Date(birthDate).toISOString().split('T')[0];
 
 const sql = 'UPDATE details SET username = ?, email = ?, phoneNumber = ?, birthDate = ?, gender = ?, address = ?, country = ?, city = ?, region = ? WHERE userId = ?';
-db.query(sql, [username, email, phoneNumber, formattedBirthDate, gender, address, country, city, region, id], (err, result) => {
+db.query(sql, [username, email, phoneNumber, birthDate, gender, address, country, city, region, id], (err, result) => {
   if (err) {
     console.error('Error updating user:', err);
     res.status(500).send('Error updating user');
