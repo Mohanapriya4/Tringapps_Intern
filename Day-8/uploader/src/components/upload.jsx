@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState } from 'react';
+import * as pdfjsLib from 'pdfjs-dist/webpack';
 
 function Upl() {
   const [files, setFiles] = useState(null);
@@ -24,8 +25,13 @@ function Upl() {
     const contents = [];
     files.forEach((file) => {
       const reader = new FileReader();
-      reader.onload = (event) => {
-        contents.push({ name: file.name, type: file.type, content: event.target.result });
+      reader.onload = async (event) => {
+        if (file.type === "application/pdf") {
+          const pdfText = await extractTextFromPDF(event.target.result);
+          contents.push({ name: file.name, type: file.type, content: pdfText });
+        } else {
+          contents.push({ name: file.name, type: file.type, content: event.target.result });
+        }
         if (contents.length === files.length) {
           setMsg("Upload successful");
           setFileContents(contents);
@@ -34,11 +40,24 @@ function Upl() {
       if (file.type.startsWith("image/")) {
         reader.readAsDataURL(file); // Read images as data URLs
       } else if (file.type === "application/pdf") {
-        reader.readAsDataURL(file); // Read PDF files as data URLs
+        reader.readAsArrayBuffer(file); // Read PDF files as ArrayBuffer
       } else {
         reader.readAsText(file); // Read other files as text
       }
     });
+  };
+
+  const extractTextFromPDF = async (arrayBuffer) => {
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    let text = "";
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      textContent.items.forEach((item) => {
+        text += item.str + "\n";
+      });
+    }
+    return text;
   };
 
   return (
@@ -55,8 +74,6 @@ function Upl() {
             <h3>{file.name}</h3>
             {file.type.startsWith("image/") ? (
               <img src={file.content} alt={file.name} width="200" />
-            ) : file.type === "application/pdf" ? (
-              <embed src={file.content} type="application/pdf" width="100%" height="600px" />
             ) : (
               <pre>{file.content}</pre>
             )}
