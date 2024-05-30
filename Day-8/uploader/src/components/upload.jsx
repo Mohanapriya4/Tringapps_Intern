@@ -1,9 +1,11 @@
-// Upl.js
 import React, { useState } from 'react';
 import { readPDFFile } from './PdfHandler';
 import { readImageFile } from './ImageHandler';
-import { readDocumentFile } from './DocumentHandler';
 import { readExcelFile } from './ExcelHandler';
+import { readVideoFile } from './VideoHandler';
+import { readAudioFile } from './AudioHandler';
+import { readTextFile } from './DocumentHandler';
+import './style.css';
 
 function Upl() {
   const [files, setFiles] = useState(null);
@@ -34,8 +36,14 @@ function Upl() {
         readImageFile(file, (content) => handleFileRead(content, contents));
       } else if (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
         readExcelFile(file, (content) => handleFileRead(content, contents));
+      } else if (file.type.startsWith('video/')) {
+        readVideoFile(file, (content) => handleFileRead(content, contents));
+      } else if (file.type.startsWith('audio/')) {
+        readAudioFile(file, (content) => handleFileRead(content, contents));
+      } else if (file.type === 'text/plain') { 
+        readTextFile(file, (content) => handleFileRead(content, contents));
       } else {
-        readDocumentFile(file, (content) => handleFileRead(content, contents));
+        console.log('Unsupported file type:', file.type);
       }
     });
   };
@@ -64,22 +72,19 @@ function Upl() {
             ) : file.type.startsWith('image/') ? (
               <img src={file.content} alt={file.name} width="200" />
             ) : file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? (
-              file.content.map((sheet, sheetIndex) => (
-                <div key={sheetIndex}>
-                  <h4>Sheet: {sheet.name}</h4>
-                  <table>
-                    <tbody>
-                      {sheet.data.map((row, rowIndex) => (
-                        <tr key={rowIndex}>
-                          {row.map((cell, cellIndex) => (
-                            <td key={cellIndex}>{cell}</td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ))
+              file.content
+            ) : file.type === 'text/plain' ? ( 
+              <pre>{file.content}</pre>
+            ) : file.type.startsWith('video/') ? (
+              <video controls width="400">
+                <source src={file.content} type={file.type} />
+                Your browser does not support the video tag.
+              </video>
+            ) : file.type.startsWith('audio/') ? (
+              <audio controls>
+                <source src={file.content} type={file.type} />
+                Your browser does not support the audio tag.
+              </audio>
             ) : (
               <pre>{file.content}</pre>
             )}
