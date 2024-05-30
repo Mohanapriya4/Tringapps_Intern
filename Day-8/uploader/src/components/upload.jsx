@@ -1,5 +1,9 @@
+// Upl.js
 import React, { useState } from 'react';
-import * as pdfjsLib from 'pdfjs-dist/webpack';
+import { readPDFFile } from './PdfHandler';
+import { readImageFile } from './ImageHandler';
+import { readDocumentFile } from './DocumentHandler';
+import { readExcelFile } from './ExcelHandler';
 
 function Upl() {
   const [files, setFiles] = useState(null);
@@ -13,51 +17,35 @@ function Upl() {
 
   const handleUpload = () => {
     if (!files) {
-      setMsg("No file selected");
+      setMsg('No file selected');
       return;
     }
 
-    setMsg("Uploading...");
+    setMsg('Uploading...');
     displayFileContents();
   };
 
   const displayFileContents = () => {
     const contents = [];
     files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = async (event) => {
-        if (file.type === "application/pdf") {
-          const pdfText = await extractTextFromPDF(event.target.result);
-          contents.push({ name: file.name, type: file.type, content: pdfText });
-        } else {
-          contents.push({ name: file.name, type: file.type, content: event.target.result });
-        }
-        if (contents.length === files.length) {
-          setMsg("Upload successful");
-          setFileContents(contents);
-        }
-      };
-      if (file.type.startsWith("image/")) {
-        reader.readAsDataURL(file); // Read images as data URLs
-      } else if (file.type === "application/pdf") {
-        reader.readAsArrayBuffer(file); // Read PDF files as ArrayBuffer
+      if (file.type === 'application/pdf') {
+        readPDFFile(file, (content) => handleFileRead(content, contents));
+      } else if (file.type.startsWith('image/')) {
+        readImageFile(file, (content) => handleFileRead(content, contents));
+      } else if (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+        readExcelFile(file, (content) => handleFileRead(content, contents));
       } else {
-        reader.readAsText(file); // Read other files as text
+        readDocumentFile(file, (content) => handleFileRead(content, contents));
       }
     });
   };
 
-  const extractTextFromPDF = async (arrayBuffer) => {
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    let text = "";
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const textContent = await page.getTextContent();
-      textContent.items.forEach((item) => {
-        text += item.str + "\n";
-      });
+  const handleFileRead = (content, contents) => {
+    contents.push(content);
+    if (contents.length === files.length) {
+      setMsg('Upload successful');
+      setFileContents(contents);
     }
-    return text;
   };
 
   return (
@@ -66,14 +54,32 @@ function Upl() {
       <input onChange={handleFileChange} type="file" multiple />
       <button onClick={handleUpload}>Upload</button>
       {msg && <span>{msg}</span>}
-     
       <div>
         <h2>File Contents:</h2>
         {fileContents.map((file, index) => (
           <div key={index}>
             <h3>{file.name}</h3>
-            {file.type.startsWith("image/") ? (
+            {file.type === 'application/pdf' ? (
+              <pre>{file.content}</pre>
+            ) : file.type.startsWith('image/') ? (
               <img src={file.content} alt={file.name} width="200" />
+            ) : file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ? (
+              file.content.map((sheet, sheetIndex) => (
+                <div key={sheetIndex}>
+                  <h4>Sheet: {sheet.name}</h4>
+                  <table>
+                    <tbody>
+                      {sheet.data.map((row, rowIndex) => (
+                        <tr key={rowIndex}>
+                          {row.map((cell, cellIndex) => (
+                            <td key={cellIndex}>{cell}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))
             ) : (
               <pre>{file.content}</pre>
             )}
