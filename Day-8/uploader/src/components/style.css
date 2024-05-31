@@ -1,88 +1,86 @@
 .upload-container {
-    text-align: center;
-  }
-  
-  .file-input {
-    font-size: 18px;
-    padding: 10px;
-    margin: 20px 0;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .upload-button {
-    font-size: 18px;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .upload-button:hover {
-    background-color: #45a049;
-  }
-  
-  body {
-    background-color: azure;
-    background-size: cover;
-    background-position: center;
-    padding: 20px;
-    border-radius: 10px;
-    color: black;
-  }
-  
-  .file-preview-container {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .file-preview-column {
-    display: flex;
-    flex-direction: column;
-    margin: 0 10px;
-  }
-  .file-preview {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 5px;
-    overflow-x: auto; /* Enable horizontal scroll for the table */
-  }
-  
-  .file-preview table {
-    width: 100%; /* Table takes up full width of the container */
-    border-collapse: collapse; /* Remove spacing between table cells */
-  }
-  
-  .file-preview th,
-  .file-preview td {
-    border: 1px solid #ddd; /* Add borders to table cells */
-    padding: 8px;
-    text-align: left; /* Align text to the left */
-  }
-  
-  .file-preview th {
-    background-color: #f2f2f2; /* Gray background for table headers */
-  }
-  
-  
-  .pdf-preview,
-  .image-preview,
-  .video-preview,
-  .audio-preview {
-    color: white;
-    height: 200px;
-    overflow-y: auto;
-    padding: 10px;
-    border-radius: 5px;
-  }
-  
-  .image-preview img {
-    width: auto;
-    height: 100%;
-    object-fit: contain;
-  }
-  
-  
+  text-align: center;
+}
+
+.file-input {
+  font-size: 18px;
+  padding: 10px;
+  margin: 20px 0;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+.upload-button {
+  font-size: 18px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background-color: #45a049;
+}
+
+body {
+  background-color: azure;
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+  border-radius: 10px;
+  color: black;
+}
+
+.file-preview-container {
+  display: flex;
+  justify-content: center;
+}
+
+.file-preview-column {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px;
+}
+.file-preview {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  overflow-x: auto; /* Enable horizontal scroll for the table */
+}
+
+.file-preview table {
+  width: 100%; /* Table takes up full width of the container */
+  border-collapse: collapse; /* Remove spacing between table cells */
+}
+
+.file-preview th,
+.file-preview td {
+  border: 1px solid #ddd; /* Add borders to table cells */
+  padding: 8px;
+  text-align: left; /* Align text to the left */
+}
+
+.file-preview th {
+  background-color: #f2f2f2; /* Gray background for table headers */
+}
+
+
+.pdf-preview,
+.image-preview,
+.video-preview,
+.audio-preview {
+  color: white;
+  height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.image-preview img {
+  width: 50%;
+  height: 100%;
+ 
+}

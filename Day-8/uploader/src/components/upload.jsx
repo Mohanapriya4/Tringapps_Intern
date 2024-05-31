@@ -5,6 +5,8 @@ import { readExcelFile } from './ExcelHandler';
 import { readVideoFile } from './VideoHandler';
 import { readAudioFile } from './AudioHandler';
 import { readTextFile } from './DocumentHandler';
+import { readCSVFile } from './CsvHandler';
+import { readWordFile } from './WordHandler';
 import './style.css';
 
 function Upl() {
@@ -17,6 +19,8 @@ function Upl() {
   const [videoFiles, setVideoFiles] = useState([]);
   const [audioFiles, setAudioFiles] = useState([]);
   const [documentFiles, setDocumentFiles] = useState([]);
+  const [csvFiles, setCsvFiles] = useState([]);
+  const [wordFiles, setWordFiles] = useState([]);
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -48,6 +52,10 @@ function Upl() {
         readAudioFile(file, (content) => handleFileRead(content, contents, setAudioFiles));
       } else if (file.type === 'text/plain') { 
         readTextFile(file, (content) => handleFileRead(content, contents, setDocumentFiles));
+      } else if (file.type === 'text/csv' || file.type === 'application/vnd.ms-excel') { // CSV MIME type
+        readCSVFile(file, (content) => handleFileRead(content, contents, setCsvFiles));
+      } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        readWordFile(file, (content) => handleFileRead(content, contents, setWordFiles));
       } else {
         console.log('Unsupported file type:', file.type);
       }
@@ -72,7 +80,7 @@ function Upl() {
       <div className="file-preview-container">
         <div className="file-preview-column">
           <div className="file-preview">
-            <h2>PDF Files:</h2>
+            <h2>PDF Files</h2>
             {pdfFiles.map((file, index) => (
               <div key={index}>
                 <h3>{file.name}</h3>
@@ -81,7 +89,7 @@ function Upl() {
             ))}
           </div>
           <div className="file-preview">
-            <h2>Image Files:</h2>
+            <h2>Image Files</h2>
             {imageFiles.map((file, index) => (
               <div key={index}>
                 <h3>{file.name}</h3>
@@ -89,10 +97,28 @@ function Upl() {
               </div>
             ))}
           </div>
+          <div className="file-preview">
+            <h2>CSV Files</h2>
+            {csvFiles.map((file, index) => (
+              <div key={index}>
+                <h3>{file.name}</h3>
+                <pre>{JSON.stringify(file.content, null, 2)}</pre>
+              </div>
+            ))}
+          </div>
+          <div className="file-preview">
+            <h2>Word Files</h2>
+            {wordFiles.map((file, index) => (
+              <div key={index}>
+                <h3>{file.name}</h3>
+                <div dangerouslySetInnerHTML={{ __html: file.content }} />
+              </div>
+            ))}
+          </div>
         </div>
         <div className="file-preview-column">
           <div className="file-preview">
-            <h2>Excel Files:</h2>
+            <h2>Excel Files</h2>
             {excelFiles.map((file, index) => (
               <div key={index}>
                 <h3>{file.name}</h3>
@@ -101,7 +127,7 @@ function Upl() {
             ))}
           </div>
           <div className="file-preview">
-            <h2>Video Files:</h2>
+            <h2>Video Files</h2>
             {videoFiles.map((file, index) => (
               <div key={index}>
                 <h3>{file.name}</h3>
@@ -113,7 +139,7 @@ function Upl() {
             ))}
           </div>
           <div className="file-preview">
-            <h2>Audio Files:</h2>
+            <h2>Audio Files</h2>
             {audioFiles.map((file, index) => (
               <div key={index}>
                 <h3>{file.name}</h3>
@@ -125,7 +151,7 @@ function Upl() {
             ))}
           </div>
           <div className="file-preview">
-            <h2>Document Files:</h2>
+            <h2>Document Files</h2>
             {documentFiles.map((file, index) => (
               <div key={index}>
                 <h3>{file.name}</h3>
