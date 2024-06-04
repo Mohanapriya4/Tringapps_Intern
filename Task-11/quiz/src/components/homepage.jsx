@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function Qz() {
     const [reminderDate, setReminderDate] = useState("");
     const [reminderTime, setReminderTime] = useState("");
+    const [showReminder, setShowReminder] = useState(false);
 
     const handleDateChange = (event) => {
         setReminderDate(event.target.value);
@@ -16,11 +17,15 @@ function Qz() {
         setReminderTime(event.target.value);
     };
 
+    const handleNotificationIconClick = () => {
+        setShowReminder(!showReminder);
+    };
+
     const scheduleReminder = () => {
         if (reminderDate && reminderTime) {
             const reminderDateTime = new Date(`${reminderDate}T${reminderTime}`);
             const now = new Date();
-            const timeDifference = reminderDateTime - now - 10 * 60 * 1000; 
+            const timeDifference = reminderDateTime - now - 10 * 60 * 1000;
 
             if (timeDifference > 0) {
                 setTimeout(() => {
@@ -38,7 +43,7 @@ function Qz() {
         <div className="welcome-container">
             <h1>Welcome to Our Website!</h1>
             <p>
-                Quiz reminder <NotificationsActiveIcon fontSize="large" />
+                Quiz reminder <NotificationsActiveIcon fontSize="large" onClick={handleNotificationIconClick} style={{ cursor: 'pointer' }} />
             </p>
             <div className="notification-bar">
                 <p>Schedule</p>
@@ -60,6 +65,14 @@ function Qz() {
                 </div>
                 <button onClick={scheduleReminder}>Set Reminder</button>
             </div>
+            {showReminder && (
+                <div className="reminder-details">
+                    <h2>Scheduled Reminder</h2>
+                    <p>Date: {reminderDate}</p>
+                    <p>Time: {reminderTime}</p>
+                    <button onClick={() => setShowReminder(false)}>Close</button>
+                </div>
+            )}
             <ToastContainer />
         </div>
     );
