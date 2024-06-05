@@ -5,61 +5,97 @@ body {
     height: 100vh;
     margin: 0;
     background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
-.welcome-container {
-    text-align: center;
-    margin: 20px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    position: relative;
+.top-bar {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #35495e;
+    color: white;
+    padding: 15px;
+    box-sizing: border-box; 
+}
+
+.left-corner {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.right-corner {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.notification-icon {
+    margin-left: 10px; 
+    cursor: pointer;
+    color:#ffd700
+}
+
+.notification-icon:hover {
+    color:darkgoldenrod;
 }
 
 .notification-bar {
-    background-color: #e9ecef;
+    background-color: white;
     color: #495057;
-    padding: 20px;
-    margin-top: 20px;
-    border: 1px solid #ced4da;
+    padding: 30px;
+    width: 400px; 
+    height: 400px; 
+    margin: 100px auto; 
+    border: 1px solid black ;
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .notification-bar p {
     margin: 0;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 30px;
+    color: #35495e;
 }
 
 .reminder-schedule {
-    margin-top: 10px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
+    
 }
 
 .reminder-schedule label {
     margin-top: 10px;
     color: #495057;
     font-weight: bold;
+    font-size: 20px; 
 }
 
 .reminder-schedule input {
     padding: 10px;
     border-radius: 5px;
-    border: 1px solid #ced4da;
+    border: 1px solid black;
     margin-top: 5px;
     width: 100%;
     box-sizing: border-box;
+    font-size: 20px; 
 }
 
 button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #35495e;
     color: white;
     border: none;
     border-radius: 5px;
@@ -68,52 +104,70 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color:lightskyblue;
+    color: #35495e;
 }
 
 h1 {
-    color: #343a40;
+    color: #ffd700;
     margin-bottom: 20px;
 }
 
 p {
-    color: #6c757d;
-    font-size: 16px;
+    color: #495057;
+    font-size: 30px;
 }
 
-.reminder-details {
-    position: absolute;
-    top: 20px;
-    right: -350px;
-    width: 300px;
-    padding: 20px;
-    background-color: #ffffff;
-    border: 1px solid #ced4da;
+.reminder-list {
+    background-color:#f8f9fa ;
+    border: 1px solid black;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    padding: 30px; 
+    position: fixed;
+    top: 150px;
+    right: 20px;
+    width: 600px;
+    max-height: 500px; 
+    overflow-y: auto;
 }
 
-.reminder-details h2 {
+.reminder-list h2 {
     margin-top: 0;
-    color: #343a40;
+    color: #35495e;
 }
 
-.reminder-details p {
-    margin: 5px 0;
-    color: #495057;
+.reminder-scroll {
+    max-height: 1000px; 
+    overflow-y: auto;
 }
 
-.reminder-details button {
-    padding: 5px 10px;
-    margin-top: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
+.reminder-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    cursor: pointer;
+    padding: 20px; /* Increase padding for more space inside the box */
+    margin-bottom: 10px;
+    width: 100%; /* Set the width to 100% of the container */
+    height: 100px;
+    box-sizing: border-box; /* Include padding in the width and height calculations */
 }
 
-.reminder-details button:hover {
-    background-color: #0056b3;
+.reminder-message {
+    color: #495057;
+    font-size: 1.2em; /* Increase font size */
 }
+
+.remove-reminder {
+    color: #dc3545;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.remove-reminder:hover {
+    color: #c82333;
+}
+
