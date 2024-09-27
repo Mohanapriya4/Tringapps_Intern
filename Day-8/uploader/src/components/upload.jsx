@@ -19,6 +19,8 @@ function Upl() {
   const [videoFiles, setVideoFiles] = useState([]);
   const [audioFiles, setAudioFiles] = useState([]);
   const [documentFiles, setDocumentFiles] = useState([]);
+  const [csvFiles, setCsvFiles] = useState([]);
+  const [wordFiles, setWordFiles] = useState([]);
   const [fileCount, setFileCount] = useState(0); // Add this state for file count
 
   const handleFileChange = (e) => {
