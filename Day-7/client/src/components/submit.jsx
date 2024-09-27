@@ -36,7 +36,7 @@ export default function Sub() {
   const handleSave = async (event, cellValues) => {
     const { id } = cellValues.row;
     try {
-      await axios.put(`http://192.168.1.114:8081/edit_user/${id}`, cellValues.row);
+      await axios.put(`http://192.168.1.3:8081/edit_user/${id}`, cellValues.row);
       setEditRowsModel((prevEditRowsModel) => ({
         ...prevEditRowsModel,
         [cellValues.id]: false,
@@ -50,7 +50,7 @@ export default function Sub() {
 
   const handleDelete = async (event, cellValues) => {
     try {
-      await axios.delete(`http://192.168.1.114:8081/delete_user/${cellValues.row.id}`);
+      await axios.delete(`http://192.168.1.3:8081/delete_user/${cellValues.row.id}`);
       fetchData();
     } catch (err) {
       console.error('Error deleting data:', err);
@@ -65,7 +65,7 @@ export default function Sub() {
   
     try {
       console.log('Deleting selected rows:', selectedRows); // Debugging line
-      await axios.delete('http://192.168.1.114:8081/delete_users', { data: { ids: selectedRows } });
+      await axios.delete('http://192.168.1.3:8081/delete_users', { data: { ids: selectedRows } });
       fetchData();
       setSelectedRows([]);
     } catch (err) {
@@ -136,7 +136,7 @@ export default function Sub() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://192.168.1.114:8081/users');
+      const response = await axios.get('http://192.168.1.3:8081/users');
       setUsers(response.data.map((user) => ({ ...user, id: user.userId })));
     } catch (err) {
       console.error('Error fetching data:', err);
