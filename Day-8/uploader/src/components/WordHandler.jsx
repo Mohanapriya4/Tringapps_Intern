@@ -15,4 +15,7 @@ export const readWordFile = (file, callback) => {
   };
 
   reader.readAsArrayBuffer(file);
+
 };
+
+

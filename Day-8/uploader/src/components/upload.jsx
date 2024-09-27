@@ -19,12 +19,12 @@ function Upl() {
   const [videoFiles, setVideoFiles] = useState([]);
   const [audioFiles, setAudioFiles] = useState([]);
   const [documentFiles, setDocumentFiles] = useState([]);
-  const [csvFiles, setCsvFiles] = useState([]);
-  const [wordFiles, setWordFiles] = useState([]);
+  const [fileCount, setFileCount] = useState(0); // Add this state for file count
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     setFiles(selectedFiles);
+    setFileCount(selectedFiles.length); // Update file count when files are selected
   };
 
   const handleUpload = () => {
@@ -74,9 +74,17 @@ function Upl() {
   return (
     <div className="upload-container">
       <h1>Uploading Files in React</h1>
-      <input className="file-input" onChange={handleFileChange} type="file" multiple />
-      <button className="upload-button" onClick={handleUpload}>Upload</button>
+      <div className="button-container">
+        <label className="choose-button">
+          Choose Files
+          <input className="file-input" onChange={handleFileChange} type="file" multiple />
+        </label>
+        <button className="upload-button" onClick={handleUpload}>Upload</button>
+      </div>
       {msg && <span>{msg}</span>}
+      <div className="file-count">
+        Number of files selected: {fileCount}
+      </div>
       <div className="file-preview-container">
         <div className="file-preview-column">
           <div className="file-preview">

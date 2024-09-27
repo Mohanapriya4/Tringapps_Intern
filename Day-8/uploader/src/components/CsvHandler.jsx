@@ -8,3 +8,5 @@ export const readCSVFile = (file, callback) => {
   };
   reader.readAsText(file);
 };
+
+
